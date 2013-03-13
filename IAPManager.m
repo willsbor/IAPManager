@@ -201,9 +201,19 @@ NSURL *purchasesURL() {
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue {
     if (self.restoreCompletionBlock) {
-        self.restoreCompletionBlock();
+        self.restoreCompletionBlock(YES, nil);
     }
     self.restoreCompletionBlock = nil;
 }
+
+// Sent when an error is encountered while adding transactions from the user's purchase history back to the queue.
+- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error
+{
+    if (self.restoreCompletionBlock) {
+        self.restoreCompletionBlock(NO, error);
+    }
+    self.restoreCompletionBlock = nil;
+}
+
 
 @end
